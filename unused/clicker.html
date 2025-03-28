@@ -24,16 +24,20 @@
     </div>
     
     <script>
-        let cookies = parseInt(localStorage.getItem("cookies")) || 0;
-        let clickValue = parseInt(localStorage.getItem("clickValue")) || 1;
-        let upgradeCost = parseInt(localStorage.getItem("upgradeCost")) || 10;
+        let cookies = Number(localStorage.getItem("cookies")) || 0;
+        let clickValue = Number(localStorage.getItem("clickValue")) || 1;
+        let upgradeCost = Number(localStorage.getItem("upgradeCost")) || 10;
         
-        document.getElementById("score").textContent = `Cookies: ${cookies}`;
-        document.getElementById("upgradeCost").textContent = upgradeCost;
+        function updateUI() {
+            document.getElementById("score").textContent = `Cookies: ${cookies}`;
+            document.getElementById("upgradeCost").textContent = upgradeCost;
+        }
+        
+        updateUI();
         
         document.getElementById("cookie").addEventListener("click", () => {
             cookies += clickValue;
-            document.getElementById("score").textContent = `Cookies: ${cookies}`;
+            updateUI();
             saveGame();
         });
         
@@ -42,9 +46,10 @@
                 cookies -= upgradeCost;
                 clickValue++;
                 upgradeCost = Math.ceil(upgradeCost * 1.5);
-                document.getElementById("score").textContent = `Cookies: ${cookies}`;
-                document.getElementById("upgradeCost").textContent = upgradeCost;
+                updateUI();
                 saveGame();
+            } else {
+                alert("Not enough cookies!");
             }
         }
         
@@ -55,30 +60,29 @@
         }
         
         function exportSave() {
-            const saveData = { cookies, clickValue, upgradeCost };
-            const blob = new Blob([JSON.stringify(saveData)], { type: "application/json" });
+            const saveData = JSON.stringify({ cookies, clickValue, upgradeCost });
+            const blob = new Blob([saveData], { type: "application/json" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
             a.download = "cookie_clicker_save.json";
-            document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
         }
         
         function importSave(event) {
             const file = event.target.files[0];
-            if (!file) return;
+            if (!file || file.type !== "application/json") {
+                alert("Invalid file type.");
+                return;
+            }
             
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const saveData = JSON.parse(e.target.result);
-                    cookies = saveData.cookies || 0;
-                    clickValue = saveData.clickValue || 1;
-                    upgradeCost = saveData.upgradeCost || 10;
-                    
-                    document.getElementById("score").textContent = `Cookies: ${cookies}`;
-                    document.getElementById("upgradeCost").textContent = upgradeCost;
+                    cookies = Number(saveData.cookies) || 0;
+                    clickValue = Number(saveData.clickValue) || 1;
+                    upgradeCost = Number(saveData.upgradeCost) || 10;
+                    updateUI();
                     saveGame();
                 } catch (error) {
                     alert("Invalid save file.");
