@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zhmixx - Terminal Site</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #ascii-logo {
+            white-space: pre;
+            font-size: 16px;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #content {
+            display: none;
+        }
+        .button {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .number-fall {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            opacity: 0.8;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="ascii-logo">loading...</div>
+    <div id="content">
+        <h1>zhmixx</h1>
+        <button class="button" onclick="navigate('home')">Home</button>
+        <button class="button" onclick="navigate('about')">About</button>
+        <button class="button" onclick="navigate('contact')">Contact</button>
+        <div id="page-content">Welcome to zhmixx.</div>
+    </div>
+    <script>
+        const asciiFrames = [
+            "z   h   m   i   x   x",
+            "z   h   m  i x  x",
+            "z  h  m i x x",
+            "z h m i x",
+            "zhmixx"
+        ];
+
+        let frame = 0;
+        function animateLogo() {
+            if (frame < asciiFrames.length) {
+                document.getElementById("ascii-logo").innerText = asciiFrames[frame];
+                frame++;
+                setTimeout(animateLogo, 500);
+            } else {
+                document.getElementById("ascii-logo").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            }
+        }
+        setTimeout(animateLogo, 500);
+        
+        function navigate(page) {
+            const content = {
+                home: "Welcome to zhmixx.",
+                about: "This is a terminal-inspired website.",
+                contact: "Email: contact@zhmixx.com"
+            };
+            document.getElementById("page-content").innerText = content[page];
+        }
+        
+        function createNumberFall() {
+            const num = document.createElement("div");
+            num.classList.add("number-fall");
+            num.innerText = Math.floor(Math.random() * 10);
+            num.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(num);
+            setTimeout(() => num.remove(), 3000);
+        }
+        setInterval(createNumberFall, 200);
+    </script>
+</body>
+</html>
