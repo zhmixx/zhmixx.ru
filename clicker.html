@@ -153,6 +153,56 @@
             }
         }
     </script>
+	<h2>Save / Load</h2>
+	<button class="upgrade" onclick="saveGame()">💾 Сохранить</button>
+	<button class="upgrade" onclick="loadGame()">📂 Загрузить</button>
+	<button class="upgrade" onclick="resetGame()">🗑 Сбросить</button>
+	<script>
+    function saveGame() {
+        const gameData = {
+            score: score,
+            clickValue: clickValue,
+            autoClickerEnabled: autoClickerEnabled,
+            upgradeCount: upgradeCount
+        };
+        localStorage.setItem("clickerSave", JSON.stringify(gameData));
+        alert("Игра сохранена!");
+    }
 
+    function loadGame() {
+        const savedData = JSON.parse(localStorage.getItem("clickerSave"));
+        if (savedData) {
+            score = savedData.score || 0;
+            clickValue = savedData.clickValue || 1;
+            autoClickerEnabled = savedData.autoClickerEnabled || false;
+            upgradeCount = savedData.upgradeCount || 0;
+
+            updateScore();
+            updateClickValue();
+            checkAchievements();
+
+            if (autoClickerEnabled) {
+                document.getElementById("autoClickerStatus").innerText = "Auto-Clicker: On";
+                autoClickerInterval = setInterval(autoClick, 1000);
+            }
+
+            alert("Игра загружена!");
+        } else {
+            alert("Сохранение не найдено.");
+        }
+    }
+
+    function resetGame() {
+        if (confirm("Вы уверены, что хотите сбросить игру?")) {
+            localStorage.removeItem("clickerSave");
+            location.reload();
+        }
+    }
+	
+	window.onload = function () {
+    loadGame();
+};
+
+</script>
 </body>
 </html>
