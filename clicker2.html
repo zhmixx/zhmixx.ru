@@ -5,63 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Clicker</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
-            margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: #f4f4f4;
             text-align: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
+        h1 { font-size: 3em; margin: 0.2em 0; }
+        h2 { margin-top: 2em; }
 
         #cookie {
             width: 220px;
-            height: 220px;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: transform 0.1s ease;
         }
 
-        #cookie:active {
-            transform: scale(0.95);
-        }
+        #cookie:active { transform: scale(0.95); }
 
         #score, #clickValue, #autoClickerStatus {
             font-size: 1.2em;
             margin: 10px 0;
         }
 
-        .section {
-            margin-top: 30px;
-        }
+        .section { margin-top: 30px; }
 
         .button {
-            background-color: #4CAF50;
+            background-color: #3498db;
             color: white;
             border: none;
-            padding: 12px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 6px;
             font-size: 1em;
-            transition: background 0.2s ease;
+            cursor: pointer;
         }
 
-        .button:hover {
-            background-color: #45a049;
-        }
+        .button:hover { background-color: #2980b9; }
 
         .achievement {
             font-size: 1em;
-            margin: 5px 0;
+            margin: 5px;
             color: gray;
         }
 
@@ -69,13 +57,21 @@
             color: green;
             font-weight: bold;
         }
+
+        .particle {
+            position: absolute;
+            font-weight: bold;
+            color: gold;
+            pointer-events: none;
+            user-select: none;
+            transition: all 0.8s ease-out;
+        }
     </style>
 </head>
 <body>
 
     <h1>Тапай кота!</h1>
-    <img id="cookie" src="/images/cat-breakdance.gif" alt="Click Me" onclick="clickCookie()">
-
+    <img id="cookie" src="/images/cat-breakdance.gif" alt="Click!" onclick="clickCookie(event)">
     <p id="score">Деньги: <span id="scoreValue">0</span></p>
     <p id="clickValue">Один клик: 1</p>
 
@@ -90,6 +86,11 @@
         <p id="autoClickerStatus">Автокликер: Выкл.</p>
         <button class="button" onclick="buyAutoClicker(50)">Купить автокликер (50)</button>
         <button class="button" onclick="upgradeAutoClicker(30)">Улучшить автокликер (30)</button>
+    </div>
+
+    <div class="section">
+        <h2>Питомцы</h2>
+        <div id="petContainer"></div>
     </div>
 
     <div class="section">
@@ -110,22 +111,44 @@
         let score = 0;
         let clickValue = 1;
         let upgradeCount = 0;
+        let bonusActive = false;
+
         let autoClicker = {
             enabled: false,
-            interval: null,
-            speed: 1
+            speed: 1,
+            interval: null
         };
 
+        const pets = [
+            { name: "kolbasa", cost: 100, boost: 0.1, owned: false },
+            { name: "shaurma", cost: 250, boost: 0.25, owned: false }
+        ];
+
         function updateUI() {
-            document.getElementById("scoreValue").textContent = score;
-            document.getElementById("clickValue").textContent = "Один клик: " + clickValue;
+            document.getElementById("scoreValue").textContent = Math.floor(score);
+            document.getElementById("clickValue").textContent = "Один клик: " + clickValue.toFixed(2);
             document.getElementById("autoClickerStatus").textContent = "Автокликер: " + (autoClicker.enabled ? "Вкл." : "Выкл.");
         }
 
-        function clickCookie() {
+        function clickCookie(e) {
             score += clickValue;
             updateUI();
             checkAchievements();
+            spawnParticle(e.clientX, e.clientY);
+        }
+
+        function spawnParticle(x, y) {
+            const particle = document.createElement("div");
+            particle.className = "particle";
+            particle.style.left = x + "px";
+            particle.style.top = y + "px";
+            particle.textContent = "+" + clickValue.toFixed(1);
+            document.body.appendChild(particle);
+            requestAnimationFrame(() => {
+                particle.style.top = (y - 50) + "px";
+                particle.style.opacity = 0;
+            });
+            setTimeout(() => particle.remove(), 800);
         }
 
         function buyUpgrade(cost, value) {
@@ -135,43 +158,35 @@
                 upgradeCount++;
                 updateUI();
                 checkAchievements();
-            } else {
-                alert("Недостаточно денег!");
-            }
+            } else alert("Недостаточно денег!");
         }
 
         function buyAutoClicker(cost) {
             if (!autoClicker.enabled && score >= cost) {
                 score -= cost;
                 autoClicker.enabled = true;
-                autoClicker.speed = 1;
-                autoClicker.interval = setInterval(() => {
-                    score += clickValue;
-                    updateUI();
-                    checkAchievements();
-                }, 1000);
+                startAutoClicker();
                 updateUI();
-            } else if (autoClicker.enabled) {
-                alert("Уже куплен!");
-            } else {
-                alert("Недостаточно денег!");
-            }
+                checkAchievements();
+            } else alert("Недостаточно денег или уже куплен!");
         }
 
         function upgradeAutoClicker(cost) {
             if (autoClicker.enabled && score >= cost) {
                 score -= cost;
                 autoClicker.speed++;
-                clearInterval(autoClicker.interval);
-                autoClicker.interval = setInterval(() => {
-                    score += clickValue;
-                    updateUI();
-                    checkAchievements();
-                }, 1000 / autoClicker.speed);
+                startAutoClicker();
                 updateUI();
-            } else {
-                alert("Купите автокликер сначала или недостаточно денег.");
-            }
+            } else alert("Купите автокликер сначала или недостаточно денег.");
+        }
+
+        function startAutoClicker() {
+            clearInterval(autoClicker.interval);
+            autoClicker.interval = setInterval(() => {
+                score += clickValue;
+                updateUI();
+                checkAchievements();
+            }, 1000 / autoClicker.speed);
         }
 
         function checkAchievements() {
@@ -180,50 +195,94 @@
             if (autoClicker.enabled) document.getElementById("achvAuto").classList.add("unlocked");
         }
 
+        function showPets() {
+            const petContainer = document.getElementById("petContainer");
+            petContainer.innerHTML = "";
+            pets.forEach((pet, i) => {
+                const btn = document.createElement("button");
+                btn.className = "button";
+                btn.textContent = pet.owned ? `${pet.name} — Активен` : `${pet.name} (${pet.cost})`;
+                btn.disabled = pet.owned;
+                btn.onclick = () => {
+                    if (score >= pet.cost) {
+                        score -= pet.cost;
+                        pet.owned = true;
+                        clickValue += pet.boost;
+                        updateUI();
+                        showPets();
+                    } else alert("Недостаточно денег!");
+                };
+                petContainer.appendChild(btn);
+            });
+        }
+
         function saveGame() {
-            const save = {
-                score, clickValue, upgradeCount, autoClicker: {
-                    enabled: autoClicker.enabled,
-                    speed: autoClicker.speed
-                }
+            const data = {
+                score, clickValue, upgradeCount, autoClicker, pets
             };
-            localStorage.setItem("catClicker", JSON.stringify(save));
-            alert("Сохранено!");
+            localStorage.setItem("catClickerSave", JSON.stringify(data));
         }
 
         function loadGame() {
-            const save = JSON.parse(localStorage.getItem("catClicker"));
-            if (save) {
-                score = save.score;
-                clickValue = save.clickValue;
-                upgradeCount = save.upgradeCount;
-                autoClicker.enabled = save.autoClicker.enabled;
-                autoClicker.speed = save.autoClicker.speed;
-
-                if (autoClicker.enabled) {
-                    autoClicker.interval = setInterval(() => {
-                        score += clickValue;
-                        updateUI();
-                        checkAchievements();
-                    }, 1000 / autoClicker.speed);
-                }
-
+            const saved = JSON.parse(localStorage.getItem("catClickerSave"));
+            if (saved) {
+                score = saved.score;
+                clickValue = saved.clickValue;
+                upgradeCount = saved.upgradeCount;
+                autoClicker = saved.autoClicker;
+                pets.forEach((p, i) => {
+                    pets[i].owned = saved.pets[i]?.owned;
+                });
+                if (autoClicker.enabled) startAutoClicker();
                 updateUI();
+                showPets();
                 checkAchievements();
-                alert("Загружено!");
-            } else {
-                alert("Нет сохранений.");
             }
         }
 
         function resetGame() {
-            if (confirm("Точно сбросить игру?")) {
-                localStorage.removeItem("catClicker");
+            if (confirm("Вы уверены, что хотите сбросить игру?")) {
+                localStorage.removeItem("catClickerSave");
                 location.reload();
             }
         }
 
-        window.onload = loadGame;
+        function activateBonus() {
+            if (bonusActive) return;
+            bonusActive = true;
+            clickValue *= 2;
+            document.body.style.background = "#fff5d7";
+            setTimeout(() => {
+                clickValue /= 2;
+                bonusActive = false;
+                document.body.style.background = "";
+                updateUI();
+            }, 10000);
+        }
+
+        setInterval(() => {
+            if (Math.random() < 0.15) {
+                const bonusBtn = document.createElement("button");
+                bonusBtn.textContent = "BONUS!";
+                bonusBtn.className = "button";
+                bonusBtn.style.position = "fixed";
+                bonusBtn.style.top = Math.random() * 80 + "%";
+                bonusBtn.style.left = Math.random() * 80 + "%";
+                bonusBtn.onclick = () => {
+                    activateBonus();
+                    bonusBtn.remove();
+                };
+                document.body.appendChild(bonusBtn);
+                setTimeout(() => bonusBtn.remove(), 7000);
+            }
+        }, 20000);
+
+        setInterval(saveGame, 15000); // Autosave every 15s
+
+        window.onload = () => {
+            loadGame();
+            showPets();
+        };
     </script>
 </body>
 </html>
