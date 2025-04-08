@@ -6,14 +6,14 @@
     <title>Cat Clicker</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; text-align: center; padding: 20px; position: relative; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; text-align: center; padding: 20px; position: relative; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
         h1, img, p, .section { display: none; }
         h1 { font-size: 3em; margin: 0.2em 0; }
         h2 { margin-top: 2em; }
-        #cookie { width: 220px; cursor: pointer; transition: transform 0.1s ease; }
+        #cookie { width: 220px; cursor: pointer; transition: transform 0.1s ease; margin: 20px auto; }
         #cookie:active { transform: scale(0.95); }
         #score, #clickValue, #autoClickerStatus { font-size: 1.2em; margin: 10px 0; }
-        .section { margin-top: 30px; }
+        .section { margin-top: 30px; width: 100%; max-width: 600px; }
         .button { background-color: #3498db; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 6px; font-size: 1em; cursor: pointer; }
         .button:hover { background-color: #2980b9; }
         .achievement { font-size: 1em; margin: 5px; color: gray; }
