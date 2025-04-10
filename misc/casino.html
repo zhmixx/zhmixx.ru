@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Machine</title>
+    <style>
+        .slot-machine {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .slots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .slot {
+            background-color: white;
+            border: 2px solid #333;
+            padding: 20px;
+            font-size: 24px;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #money, #message {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slot-machine">
+        <h1>Slot Machine</h1>
+        <div id="money">Current Money: 8000</div>
+        <div id="message"></div>
+        <div class="slots">
+            <div class="slot" id="slot1">?</div>
+            <div class="slot" id="slot2">?</div>
+            <div class="slot" id="slot3">?</div>
+        </div>
+        <button onclick="spin()">Spin! (Costs 100)</button>
+    </div>
+
+    <script>
+        let money = 8000;
+        const symbols = ['🍒', '🍋', '🍊', '🍇', '7️⃣', '💎'];
+        const winningCombos = {
+            '7️⃣7️⃣7️⃣': 1000,
+            '💎💎💎': 500,
+            '🍒🍒🍒': 200,
+            '🍋🍋🍋': 150,
+            '🍊🍊🍊': 100,
+            '🍇🍇🍇': 100
+        };
+
+        function spin() {
+            if (money < 100) {
+                document.getElementById('message').innerHTML = "Not enough money!";
+                return;
+            }
+
+            money -= 100;
+            document.getElementById('money').innerHTML = `Current Money: ${money}`;
+
+            // Generate random symbols
+            const result = [
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)]
+            ];
+
+            // Display results
+            document.getElementById('slot1').innerHTML = result[0];
+            document.getElementById('slot2').innerHTML = result[1];
+            document.getElementById('slot3').innerHTML = result[2];
+
+            // Check for winnings
+            const combination = result.join('');
+            let winnings = 0;
+
+            if (winningCombos[combination]) {
+                winnings = winningCombos[combination];
+                money += winnings;
+                document.getElementById('message').innerHTML = `Jackpot! You won ${winnings}!`;
+            } else if (result[0] === result[1] && result[1] === result[2]) {
+                winnings = 50; // Any three matching symbols
+                money += winnings;
+                document.getElementById('message').innerHTML = `Three matching symbols! You won ${winnings}!`;
+            } else {
+                document.getElementById('message').innerHTML = "Sorry, no win this time.";
+            }
+
+            document.getElementById('money').innerHTML = `Current Money: ${money}`;
+        }
+    </script>
+</body>
+</html>
