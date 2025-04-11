@@ -32,17 +32,31 @@
             height: 80px;
             line-height: 80px;
             border-radius: 5px;
-            transition: all 0.5s ease;
-            animation: spin 1s linear;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes spin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
+        .reel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            animation: reelSpin 1s linear infinite;
         }
 
-        .spinning {
-            animation: spin 1s linear infinite;
+        @keyframes reelSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-300%); } /* Adjust based on number of symbols */
+        }
+
+        .symbol {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         button {
@@ -69,6 +83,10 @@
             background-color: #90EE90;
             border-color: #2E8B57;
         }
+
+        .stopped {
+            animation-play-state: paused !important;
+        }
     </style>
 </head>
 <body>
@@ -77,9 +95,9 @@
         <div id="money">Current Money: 8000</div>
         <div id="message"></div>
         <div class="slots">
-            <div class="slot" id="slot1">?</div>
-            <div class="slot" id="slot2">?</div>
-            <div class="slot" id="slot3">?</div>
+            <div class="slot" id="slot1"><div class="reel" id="reel1"></div></div>
+            <div class="slot" id="slot2"><div class="reel" id="reel2"></div></div>
+            <div class="slot" id="slot3"><div class="reel" id="reel3"></div></div>
         </div>
         <button onclick="spin()">Spin! (Costs 100)</button>
     </div>
@@ -103,6 +121,27 @@
             '🍋🍋': 100          // Two Lemons (new)
         };
 
+        // Initialize reels with all symbols
+        function initReels() {
+            const reels = ['reel1', 'reel2', 'reel3'];
+            reels.forEach(reelId => {
+                const reel = document.getElementById(reelId);
+                symbols.forEach(symbol => {
+                    const symbolDiv = document.createElement('div');
+                    symbolDiv.className = 'symbol';
+                    symbolDiv.textContent = symbol;
+                    reel.appendChild(symbolDiv);
+                });
+                // Duplicate symbols to create continuous scrolling effect
+                symbols.forEach(symbol => {
+                    const symbolDiv = document.createElement('div');
+                    symbolDiv.className = 'symbol';
+                    symbolDiv.textContent = symbol;
+                    reel.appendChild(symbolDiv);
+                });
+            });
+        }
+
         function spin() {
             if (money < 100) {
                 document.getElementById('message').innerHTML = "Not enough money!";
@@ -112,80 +151,100 @@
             money -= 100;
             document.getElementById('money').innerHTML = `Current Money: ${money}`;
 
-            // Add spinning animation
-            const slots = ['slot1', 'slot2', 'slot3'];
-            slots.forEach(id => {
-                const slot = document.getElementById(id);
-                slot.classList.add('spinning');
+            // Start spinning all reels
+            const reels = ['reel1', 'reel2', 'reel3'];
+            reels.forEach(reelId => {
+                const reel = document.getElementById(reelId);
+                reel.classList.remove('stopped');
+                reel.style.animation = 'none';
+                reel.offsetHeight; // Trigger reflow
+                reel.style.animation = 'reelSpin 1.5s linear';
             });
 
-            // Simulate spinning delay
+            // Stop reels with delay to simulate staggered stopping
             setTimeout(() => {
-                // Generate random symbols
                 const result = [
                     symbols[Math.floor(Math.random() * symbols.length)],
                     symbols[Math.floor(Math.random() * symbols.length)],
                     symbols[Math.floor(Math.random() * symbols.length)]
                 ];
 
-                // Remove spinning class and display results
-                slots.forEach((id, index) => {
-                    const slot = document.getElementById(id);
-                    slot.classList.remove('spinning');
-                    slot.innerHTML = result[index];
+                let currentTime = 0;
+                reels.forEach((reelId, index) => {
+                    setTimeout(() => {
+                        const reel = document.getElementById(reelId);
+                        reel.classList.add('stopped');
+                        // Find the position to stop at the target symbol
+                        const symbolHeight = 80; // Height of each symbol
+                        const totalSymbols = symbols.length * 2; // Doubled for continuous effect
+                        const targetSymbol = result[index];
+                        let symbolIndex = symbols.indexOf(targetSymbol);
+                        let offset = -(symbolIndex * symbolHeight) - (Math.random() * symbolHeight * totalSymbols);
+
+                        reel.style.transform = `translateY(${offset}px)`;
+
+                        if (index === reels.length - 1) {
+                            checkWin(result);
+                        }
+                    }, currentTime);
+                    currentTime += 300; // Staggered stop delay
                 });
+            }, 1500); // Total spin duration
+        }
 
-                // Check for winnings
-                const combination = result.join('');
-                let winnings = 0;
+        function checkWin(result) {
+            const combination = result.join('');
+            let winnings = 0;
+            const slots = ['slot1', 'slot2', 'slot3'];
 
-                // Check for three matching symbols
-                if (winningCombos[combination]) {
-                    winnings = winningCombos[combination];
-                    money += winnings;
-                    document.getElementById('message').innerHTML = `Jackpot! You won ${winnings}!`;
-                    slots.forEach(id => {
-                        document.getElementById(id).classList.add('win');
-                    });
-                } 
-                // Check for two matching symbols (first two positions)
-                else if (result[0] === result[1] && winningCombos[result[0] + result[0]]) {
-                    winnings = winningCombos[result[0] + result[0]];
-                    money += winnings;
-                    document.getElementById('message').innerHTML = `Nice! Two ${result[0]}s - You won ${winnings}!`;
+            // Check for three matching symbols
+            if (winningCombos[combination]) {
+                winnings = winningCombos[combination];
+                money += winnings;
+                document.getElementById('message').innerHTML = `Jackpot! You won ${winnings}!`;
+                slots.forEach(id => {
+                    document.getElementById(id).classList.add('win');
+                });
+            } 
+            // Check for two matching symbols (first two positions)
+            else if (result[0] === result[1] && winningCombos[result[0] + result[0]]) {
+                winnings = winningCombos[result[0] + result[0]];
+                money += winnings;
+                document.getElementById('message').innerHTML = `Nice! Two ${result[0]}s - You won ${winnings}!`;
+                document.getElementById('slot1').classList.add('win');
+                document.getElementById('slot2').classList.add('win');
+            }
+            // Check for any two matching symbols in any position
+            else if ((result[0] === result[1] || result[1] === result[2] || result[0] === result[2]) && winnings === 0) {
+                winnings = 50; // Any two matching symbols
+                money += winnings;
+                document.getElementById('message').innerHTML = `Two matching symbols! You won ${winnings}!`;
+                if (result[0] === result[1]) {
                     document.getElementById('slot1').classList.add('win');
                     document.getElementById('slot2').classList.add('win');
-                }
-                // Check for any two matching symbols in any position
-                else if ((result[0] === result[1] || result[1] === result[2] || result[0] === result[2]) && winnings === 0) {
-                    winnings = 50; // Any two matching symbols
-                    money += winnings;
-                    document.getElementById('message').innerHTML = `Two matching symbols! You won ${winnings}!`;
-                    if (result[0] === result[1]) {
-                        document.getElementById('slot1').classList.add('win');
-                        document.getElementById('slot2').classList.add('win');
-                    } else if (result[1] === result[2]) {
-                        document.getElementById('slot2').classList.add('win');
-                        document.getElementById('slot3').classList.add('win');
-                    } else {
-                        document.getElementById('slot1').classList.add('win');
-                        document.getElementById('slot3').classList.add('win');
-                    }
+                } else if (result[1] === result[2]) {
+                    document.getElementById('slot2').classList.add('win');
+                    document.getElementById('slot3').classList.add('win');
                 } else {
-                    document.getElementById('message').innerHTML = "Sorry, no win this time.";
+                    document.getElementById('slot1').classList.add('win');
+                    document.getElementById('slot3').classList.add('win');
                 }
+            } else {
+                document.getElementById('message').innerHTML = "Sorry, no win this time.";
+            }
 
-                // Update money display
-                document.getElementById('money').innerHTML = `Current Money: ${money}`;
+            document.getElementById('money').innerHTML = `Current Money: ${money}`;
 
-                // Remove win class after 2 seconds
-                setTimeout(() => {
-                    slots.forEach(id => {
-                        document.getElementById(id).classList.remove('win');
-                    });
-                }, 2000);
-            }, 1000); // Spin animation duration
+            // Remove win class after 2 seconds
+            setTimeout(() => {
+                slots.forEach(id => {
+                    document.getElementById(id).classList.remove('win');
+                });
+            }, 2000);
         }
+
+        // Initialize reels when page loads
+        window.onload = initReels;
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92e804846f7ddd19',t:'MTc0NDM0ODY0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html></DOCUMENT>
