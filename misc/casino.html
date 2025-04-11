@@ -44,12 +44,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            animation: reelSpin 1s linear infinite;
-        }
-
-        @keyframes reelSpin {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-300%); } /* Adjust based on number of symbols */
+            transition: transform 0.5s ease-out; /* Smooth stopping transition */
         }
 
         .symbol {
@@ -84,8 +79,13 @@
             border-color: #2E8B57;
         }
 
-        .stopped {
-            animation-play-state: paused !important;
+        .spinning {
+            animation: reelSpin 1.5s linear infinite;
+        }
+
+        @keyframes reelSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-800%); } /* Adjusted for smoother, longer scroll */
         }
     </style>
 </head>
@@ -132,7 +132,7 @@
                     symbolDiv.textContent = symbol;
                     reel.appendChild(symbolDiv);
                 });
-                // Duplicate symbols to create continuous scrolling effect
+                // Duplicate symbols for smooth looping
                 symbols.forEach(symbol => {
                     const symbolDiv = document.createElement('div');
                     symbolDiv.className = 'symbol';
@@ -153,15 +153,18 @@
 
             // Start spinning all reels
             const reels = ['reel1', 'reel2', 'reel3'];
+            const spinDuration = 1500; // Total spin duration in ms
+            let currentTime = 0;
+
             reels.forEach(reelId => {
                 const reel = document.getElementById(reelId);
-                reel.classList.remove('stopped');
-                reel.style.animation = 'none';
+                reel.style.animation = 'none'; // Reset animation
                 reel.offsetHeight; // Trigger reflow
-                reel.style.animation = 'reelSpin 1.5s linear';
+                reel.style.animation = `reelSpin ${spinDuration}ms linear`;
+                reel.classList.add('spinning');
             });
 
-            // Stop reels with delay to simulate staggered stopping
+            // Stop reels smoothly with staggered delay
             setTimeout(() => {
                 const result = [
                     symbols[Math.floor(Math.random() * symbols.length)],
@@ -169,30 +172,31 @@
                     symbols[Math.floor(Math.random() * symbols.length)]
                 ];
 
-                let currentTime = 0;
                 reels.forEach((reelId, index) => {
                     setTimeout(() => {
                         const reel = document.getElementById(reelId);
-                        reel.classList.add('stopped');
-                        // Find the position to stop at the target symbol
+                        const targetSymbol = result[index];
                         const symbolHeight = 80; // Height of each symbol
                         const totalSymbols = symbols.length * 2; // Doubled for continuous effect
-                        const targetSymbol = result[index];
                         let symbolIndex = symbols.indexOf(targetSymbol);
-                        let offset = -(symbolIndex * symbolHeight) - (Math.random() * symbolHeight * totalSymbols);
+                        let randomOffset = Math.floor(Math.random() * symbolHeight * totalSymbols / 2); // Random extra spin
+                        let finalOffset = -(symbolIndex * symbolHeight + randomOffset);
 
-                        reel.style.transform = `translateY(${offset}px)`;
+                        // Smoothly stop the reel
+                        reel.style.transition = 'transform 0.8s ease-out'; // Smooth stop transition
+                        reel.style.transform = `translateY(${finalOffset}px)`;
+                        reel.classList.remove('spinning');
 
                         if (index === reels.length - 1) {
-                            checkWin(result);
+                            setTimeout(() => checkWin(result, reels), 800); // Wait for last reel to stop
                         }
                     }, currentTime);
                     currentTime += 300; // Staggered stop delay
                 });
-            }, 1500); // Total spin duration
+            }, spinDuration);
         }
 
-        function checkWin(result) {
+        function checkWin(result, reels) {
             const combination = result.join('');
             let winnings = 0;
             const slots = ['slot1', 'slot2', 'slot3'];
@@ -241,6 +245,14 @@
                     document.getElementById(id).classList.remove('win');
                 });
             }, 2000);
+
+            // Reset transition after stop to prepare for next spin
+            setTimeout(() => {
+                reels.forEach(reelId => {
+                    const reel = document.getElementById(reelId);
+                    reel.style.transition = ''; // Reset transition
+                });
+            }, 800);
         }
 
         // Initialize reels when page loads
