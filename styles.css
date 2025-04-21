@@ -63,12 +63,19 @@ header h1 {
 }
 
 .image {
-    width: auto;
     max-width: 100%;
+    height: auto;
     margin: 20px auto;
     display: block;
-    align-self: center;
-    justify-self: center;
+    border: 1px solid var(--shadow);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.image[loading="lazy"] {
+    opacity: 0;
+}
+.image[loading="lazy"].loaded {
+    opacity: 1;
 }
 
 .theme-switch-wrapper {
@@ -136,7 +143,8 @@ input:checked + .slider:before {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    align-items: center;
+    align-content: center;
+    justify-content: center;
 }
 
 .post h1 {
@@ -170,21 +178,28 @@ input:checked + .slider:before {
 }
 
 .btn {
-    display: inline-block;
+    display: block;
     padding: 10px 20px;
     font-size: 16px;
     color: white;
-    background-color: #007bff;
+    background-color: var(--btn-bg, #007bff);
     border: none;
     border-radius: 5px;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out, transform 0.2s ease;
     margin: 0 auto;
+    text-align: center;
 }
-
 .btn:hover {
-    background-color: #0056b3;
+    background-color: var(--btn-hover, #0056b3);
+}
+.btn:focus {
+    outline: 2px solid var(--btn-hover, #0056b3);
+    outline-offset: 2px;
+}
+.btn:active {
+    transform: scale(0.98);
 }
 
 footer {
