@@ -13,6 +13,9 @@ body.light-mode {
     --switch-thumb-off: #FFFFFF;
     --switch-thumb-on: #FFFFFF;
     --meta-text: #777;
+    --btn-bg: #007bff;
+    --btn-hover: #0056b3;
+    --btn-text: white;
 }
 
 body.dark-mode {
@@ -29,6 +32,9 @@ body.dark-mode {
     --switch-thumb-off: #BDBDBD;
     --switch-thumb-on: #121212;
     --meta-text: #aaa;
+    --btn-bg: #1e90ff;
+    --btn-hover: #4682b4;
+    --btn-text: white;
 }
 
 body {
@@ -68,14 +74,6 @@ header h1 {
     margin: 20px auto;
     display: block;
     border: 1px solid var(--shadow);
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
-.image[loading="lazy"] {
-    opacity: 0;
-}
-.image[loading="lazy"].loaded {
-    opacity: 1;
 }
 
 .theme-switch-wrapper {
@@ -133,6 +131,10 @@ input:checked + .slider:before {
     max-width: 900px;
     margin: 2rem auto;
     padding: 0 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .post {
@@ -143,8 +145,9 @@ input:checked + .slider:before {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     text-align: center;
-    align-content: center;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .post h1 {
@@ -177,11 +180,13 @@ input:checked + .slider:before {
     transition: color 0.3s ease;
 }
 
-.btn {
-    display: block;
+.btn,
+a.btn,
+button.btn {
+    display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
-    color: white;
+    color: var(--btn-text, white);
     background-color: var(--btn-bg, #007bff);
     border: none;
     border-radius: 5px;
@@ -190,16 +195,33 @@ input:checked + .slider:before {
     transition: background 0.3s ease-in-out, transform 0.2s ease;
     margin: 0 auto;
     text-align: center;
+    box-sizing: border-box;
 }
-.btn:hover {
+
+.btn:hover,
+a.btn:hover,
+button.btn:hover {
     background-color: var(--btn-hover, #0056b3);
 }
-.btn:focus {
+
+.btn:focus,
+a.btn:focus,
+button.btn:focus {
     outline: 2px solid var(--btn-hover, #0056b3);
     outline-offset: 2px;
 }
-.btn:active {
+
+.btn:active,
+a.btn:active,
+button.btn:active {
     transform: scale(0.98);
+}
+
+.error-page {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 footer {
