@@ -65,7 +65,7 @@ header h1 {
 .image {
     width: auto;
     max-width: 100%;
-    margin: 20px 0;
+    margin: 20px auto;
 }
 
 .theme-switch-wrapper {
@@ -141,6 +141,9 @@ input:checked + .slider:before {
     font-size: 1.8rem;
     color: var(--text);
     user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .post:hover {
