@@ -3,207 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>zhmixx Pages Info</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            min-height: 100vh;
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            width: 90%;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-            font-size: 2.5em;
-            font-weight: bold;
-        }
-
-        section {
-            margin-top: 30px;
-            padding: 25px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        h2 {
-            color: #3498db;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        ol {
-            padding-left: 0;
-            list-style-position: inside;
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        li {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 4px solid #3498db;
-            margin-bottom: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        li:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        strong {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        tt {
-            background-color: #f1f1f1;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .note {
-            color: #7f8c8d;
-            font-style: italic;
-            margin-top: 10px;
-            font-size: 0.9em;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #2980b9;
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                width: 85%;
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            h2 {
-                font-size: 1.4em;
-            }
-
-            section {
-                padding: 15px;
-            }
-
-            li {
-                padding: 10px;
-            }
-        }
-    </style>
+    <title>zhmixx pages</title>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>zhmixx Pages Info</h1>
+<body class="light-mode">
+    <header>
+        <h1>zhmixx pages</h1>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox" aria-label="Toggle dark mode">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </header>
 
-        <section>
+    <main class="container">
+        <article class="post">
             <h2>How to Create a Page</h2>
-            <ol>
+            <ol style="padding-left: 20px; text-align: left;">
                 <li><strong>You Must Know HTML to Create a Basic Page!</strong>
-                    <p class="note">Basic HTML knowledge is required.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Basic HTML knowledge is required.</p>
                 </li>
-                <li>Images for your page will be stored in <tt>/zhmuserpages/*YOUR_HTML_PAGE_NAME*/*IMAGE_NAME*</tt>
-                    <p class="note">This is the path you'll use to insert images on your site.</p>
+                <li>Images for your page will be stored in <tt style="background-color: var(--switch-track-off); padding: 2px 5px; border-radius: 3px;">/zhmuserpages/*YOUR_HTML_PAGE_NAME*/*IMAGE_NAME*</tt>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">This is the path you'll use to insert images on your site.</p>
                 </li>
                 <li>Upload your HTML files and images through Google Forms. <strong>Be sure to name the images correctly!</strong>
-                    <p class="note">Incorrectly named images will cause errors.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Incorrectly named images will cause errors.</p>
                 </li>
                 <li>A moderator will review your submission and contact you to confirm whether your page is live.
-                    <p class="note">Approval may take up to 72 hours. If a moderator hasn't contacted you yet, it means that you're blacklisted.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Approval may take up to 72 hours. If a moderator hasn't contacted you yet, it means that you're blacklisted.</p>
                 </li>
             </ol>
-            <a href="https://forms.gle/qoNJdHAP2mPet6ip9" target="_blank" class="button">Go through the process!</a>
-        </section>
+            <a href="https://forms.gle/qoNJdHAP2mPet6ip9" target="_blank" class="btn">Go through the process!</a>
+        </article>
 
-        <section>
+        <article class="post">
             <h2>Rules and Guidelines</h2>
-            <ol>
+            <ol style="padding-left: 20px; text-align: left;">
                 <li><strong>No Malicious Code:</strong> Do not attempt to upload malicious code to your page. Violations will result in immediate rejection and blacklisting.
-                    <p class="note">Self-explanatory.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Self-explanatory.</p>
                 </li>
                 <li><strong>No Hate Speech or Discrimination:</strong> Do not promote hate based on race, age, gender, sexuality, etc. Racism, homophobia, or any discriminatory behavior is prohibited. Certain topics like religion or politics should be avoided, including jokes or media referencing tragic events. Violations will result in rejection and blacklisting.
-                    <p class="note">Even if intended as a "joke," it’s not acceptable and will not be tolerated.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Even if intended as a "joke," it’s not acceptable and will not be tolerated.</p>
                 </li>
                 <li><strong>No NSFW/NSFL Content:</strong> No NSFW or NSFL content of any kind is allowed, including sexual remarks, inappropriate imagery, animal cruelty, or gore. Violations will result in rejection and blacklisting.
-                    <p class="note">Keep content published appropriate.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Keep content published appropriate.</p>
                 </li>
                 <li><strong>No Doxxing or Impersonation:</strong> Do not attempt to dox or impersonate individuals. This includes stealing artwork or creations from others and claiming them as your own, discrediting the original artist. Violations will result in rejection.
-                    <p class="note">Always give credit to original creators and respect intellectual property.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">Always give credit to original creators and respect intellectual property.</p>
                 </li>
                 <li><strong>Use Common Sense:</strong> If something isn’t explicitly mentioned in these rules, it doesn’t necessarily mean it is permitted. Use good judgment.
-                    <p class="note">When in doubt, contact a moderator for clarification before submitting.</p>
+                    <p class="note" style="font-style: italic; color: var(--meta-text);">When in doubt, contact a moderator for clarification before submitting.</p>
                 </li>
             </ol>
-            <a href="https://t.me/zhmixxpages" class="button">Contact Support on Telegram</a>
-			<a href="https://discord.gg/VbrBe5CuK9" class="button">Contact Support on Discord</a>
-<a href="mailto:zhmixx@megasiski.ru" class="button">Contact Owner by E-Mail</a>
-        </section>
-    </div>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://t.me/zhmixxpages" class="btn">Contact Support on Telegram</a>
+                <a href="https://discord.gg/VbrBe5CuK9" class="btn">Contact Support on Discord</a>
+                <a href="mailto:zhmixx@megasiski.ru" class="btn">Contact Owner by E-Mail</a>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        zhmixx.ru :3
+    </footer>
 
     <script>
-        document.querySelector('.button[href*="forms.gle"]').addEventListener('click', function(e) {
-            if (!confirm('Press "OK" only if you are ready.')) {
-                e.preventDefault();
-            }
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+            const currentTheme = localStorage.getItem('theme') || 'light-mode';
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+            document.body.className = currentTheme;
+
+            if (currentTheme === 'dark-mode') {
+                toggleSwitch.checked = true;
+            }
+
+            toggleSwitch.addEventListener('change', () => {
+                if (toggleSwitch.checked) {
+                    document.body.classList.remove('light-mode');
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light-mode');
+                }
+            });
+
+            document.querySelector('.btn[href*="forms.gle"]').addEventListener('click', function(e) {
+                if (!confirm('Press "OK" only if you are ready.')) {
+                    e.preventDefault();
+                }
             });
         });
     </script>

@@ -1,86 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>under construction</title>
-    <!-- favicon for branding in browser tabs -->
+    <title>zhmixx.ru</title>
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-    <style>
-        /* center the content both horizontally and vertically */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* ensures content covers full viewport height */
-            background-color: #f4f4f4;
-            font-family: arial, sans-serif;
-            text-align: center;
-            margin: 0;
-        }
-        
-        /* styles for the content container */
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px; /* rounded corners for a softer look */
-            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); /* adds subtle depth */
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* center the content horizontally */
-        }
-        
-        /* styling for the main heading */
-        h1 {
-            font-size: 24px;
-            color: #333; /* dark gray for better readability */
-        }
-        
-        /* styling for the description text */
-        p {
-            font-size: 18px;
-            color: #666; /* lighter gray for contrast */
-        }
-        
-        /* styling for the image */
-        .image {
-            width: auto;
-            max-width: 100%;
-            margin: 20px 0;
-        }
-        
-        /* styling for the button */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background 0.3s ease-in-out;
-            margin-top: 20px; /* added margin to ensure space above the button */
-        }
-        
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- main content container -->
-    <div class="container">
-        <h1>not so under construction..?</h1>
-        <p>check out pages and my bio.</p>
-        
-        <!-- image below the text -->
-        <img src="/images/cat-breakdance.gif" alt="under construction" class="image">
-        
-        <!-- button beneath the image -->
-        <a href="/pages/info" class="btn">zhmixx pages</a>
-        <a href="/bio" class="btn">my bio</a>
-    </div>
+<body class="light-mode">
+    <header>
+        <h1>zhmixx.ru</h1>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox" aria-label="Toggle dark mode">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="post">
+            <h2>not so under construction..?</h2>
+            <p>check out pages and my bio.</p>
+            <img src="/images/cat-breakdance.gif" alt="under construction" class="image" style="max-width: 100%; margin: 20px 0;">
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="/pages/info" class="btn">zhmixx pages</a>
+                <a href="/bio" class="btn">my bio</a>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        zhmixx.ru :3
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+            const currentTheme = localStorage.getItem('theme') || 'light-mode';
+
+            document.body.className = currentTheme;
+
+            if (currentTheme === 'dark-mode') {
+                toggleSwitch.checked = true;
+            }
+
+            toggleSwitch.addEventListener('change', () => {
+                if (toggleSwitch.checked) {
+                    document.body.classList.remove('light-mode');
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light-mode');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
