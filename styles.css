@@ -16,6 +16,7 @@ body.light-mode {
     --btn-bg: #007bff;
     --btn-hover: #0056b3;
     --btn-text: white;
+    --notice-color: rgb(180, 10, 10);
 }
 
 body.dark-mode {
@@ -35,6 +36,7 @@ body.dark-mode {
     --btn-bg: #1e90ff;
     --btn-hover: #4682b4;
     --btn-text: white;
+    --notice-color: rgb(180, 26, 26);
 }
 
 body {
@@ -231,4 +233,24 @@ footer {
     font-size: 0.9rem;
     opacity: 0.7;
     user-select: none;
+}
+
+.notice {
+    background: var(--notice-color);
+    color: var(--btn-text);
+    padding: 0.75rem 1.5rem;
+    margin: 1rem auto;
+    max-width: 900px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px var(--shadow);
+    font-size: 0.9rem;
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.2s ease;
+    position: sticky;
+    top: 5.5rem;
+    z-index: 99;
+}
+
+.notice p {
+    margin: 0;
 }
