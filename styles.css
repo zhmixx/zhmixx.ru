@@ -286,3 +286,17 @@ footer {
 .notice p {
     margin: 0;
 }
+
+@media (pointer: coarse) {
+    .post:hover {
+        pointer-events: none;
+    }
+
+    li:hover {
+        pointer-events: none;
+    }
+
+    .btn:hover {
+        pointer-events: none;
+    }
+}
