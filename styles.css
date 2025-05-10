@@ -289,14 +289,14 @@ footer {
 
 @media (pointer: coarse) {
     .post:hover {
-        pointer-events: none;
+        all: initial;
     }
 
     li:hover {
-        pointer-events: none;
+        all:initial;
     }
 
     .btn:hover {
-        pointer-events: none;
+        all: initial;
     }
 }
