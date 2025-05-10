@@ -2,7 +2,7 @@ body.light-mode {
     --bg: #f9f9f9;
     --text: #222;
     --card: #fff;
-    --accent: #ffffff;
+    --accent: #0084ff;
     --shadow: rgba(0, 0, 0, 0.05);
     --switch-width: 52px;
     --switch-height: 32px;
@@ -23,6 +23,7 @@ body.dark-mode {
     --bg: #121212;
     --text: #eee;
     --card: #1e1e1e;
+    --accent: #B39DDB;
     --shadow: rgba(0, 0, 0, 0.2);
     --switch-width: 52px;
     --switch-height: 32px;
@@ -183,6 +184,36 @@ input:checked + .slider:before {
     transition: color 0.3s ease;
 }
 
+.note {
+    color: var(--meta-text);
+    font-style: italic;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+ol {
+    padding-left: 0;
+    list-style-position: inside;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+li {
+    background-color: var(--bg);
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid var(--accent);
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px var(--shadow);
+}
+
 .btn,
 a.btn,
 button.btn {
@@ -196,7 +227,7 @@ button.btn {
     text-decoration: none;
     cursor: pointer;
     transition: background 0.3s ease-in-out, transform 0.2s ease;
-    margin: 0 auto;
+    margin-top: 5px, auto;
     text-align: center;
     box-sizing: border-box;
 }
