@@ -287,16 +287,15 @@ footer {
     margin: 0;
 }
 
-@media (pointer: coarse) {
-    .post:hover {
-        all: initial;
-    }
 
-    li:hover {
-        all:initial;
-    }
+.mobile .post:hover {
+    all: initial;
+}
 
-    .btn:hover {
-        all: initial;
-    }
+.mobile li:hover {
+    all:initial;
+}
+
+.mobile .btn:hover {
+    all: initial;
 }
