@@ -13,7 +13,7 @@
             my_bio.exe
             <div class="window-controls">
                 <div class="window-button minimize" onclick="minimizeWindow()"></div>
-                <div class="window-button close" onclick="closeWindow()"></div>
+                <div class="window-button close" href="/"></div>
             </div>
         </div>
 
@@ -56,10 +56,6 @@
         function restoreWindow() {
             document.getElementById('mainWindow').style.display = 'block';
             document.getElementById('taskbar').style.display = 'none';
-        }
-
-        function closeWindow() {
-            window.close();
         }
     </script>
 </html>
